@@ -39,18 +39,29 @@ except ValueError:
 # Now we proceed with building the simplex tableau
 table = [[0 for i in range(n + 1 + m)] for j in range(m+1)]  # Create table
 
-for i in range(n):
-    table[0][i] = -obj[i]  # Fill in z-row
+    for i in range(n):
+        table[0][i] = -obj[i]  # Fill in z-row
 
+    for i in range(1, m + 1):  # Fill in constraints coefficients
+        for j in range(n):
+            if j < len(constraints[i - 1]):
+                table[i][j] = constraints[i - 1][j]
 for i in range(1, m + 1):  # Fill in constraints coefficients
     for j in range(n):
         if j < len(constraints[i - 1]):
             table[i][j] = constraints[i - 1][j]
 
+    table[0][-1] = 0  # RHS of z
+    for i in range(1, m + 1):  # Other RHS
+        table[i][-1] = rhs[i - 1]
 table[0][-1] = 0  # RHS of z
 for i in range(1, m + 1):  # Other RHS
     table[i][-1] = rhs[i - 1]
 
+    for i in range(1, m + 1):  # Fill in slack variables
+        for j in range(n, n + m):
+            if j - n == i - 1:
+                table[i][j] = 1
 for i in range(1, m + 1):  # Fill in slack variables
     for j in range(n, n + m):
         if j - n == i - 1:
