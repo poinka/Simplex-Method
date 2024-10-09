@@ -171,5 +171,7 @@ obj, constraints, rhs, accuracy, is_maximization = input_values()
 
 # obj, constraints, rhs, accuracy, is_maximization = [-2, 4, 7, 1, 5], [[-1, 1, 2, 1, 2], [-1, 2, 3, 1, 1], [-1, 1, 1, 2, 1]], [7, 6, 4], 6, False
 
+# obj, constraints, rhs, accuracy, is_maximization = [2, 3, 0, -1, 0, 0 ], [[2, -1, 0, -2, 1, 0], [3, 2, 1, -3, 0, 0],  [-1, 3, 0, 4, 0, 1]], [16, 18, 24], 6, True
+
 z_value, answers = simplex(obj, constraints, rhs, accuracy, is_maximization)
 output_values(z_value, answers, is_maximization)
