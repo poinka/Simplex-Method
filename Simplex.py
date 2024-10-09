@@ -93,8 +93,8 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
 
         z_value = round_value(table[0][-1], accuracy)  # Update the current value of z
 
-        print("Updated Simplex Tableau:")
-        print(table, key_row)
+        # print("Updated Simplex Tableau:")
+        # print(table, key_row)
 
     # After the loop, determine the values of the decision variables
     answers = [0] * n  # Initialize all decision variables to zero
@@ -121,7 +121,7 @@ def input_values():
         print("Enter the coefficients of constraint function separated by space (each constraint on each line):")
         for i in range(m):
             constraint = list(map(float, input().split()))
-            if len(constraint) != n:  # Check that each constraint has the correct number of coefficients
+            if len(constraint) > n:  # Check that each constraint has the correct number of coefficients
                 raise ValueError("Incorrect number of coefficients in constraints.")
             if not is_linear(constraint):
                 raise ValueError("Non-linear coefficients in constraints.")
@@ -157,7 +157,7 @@ def output_values(z_value, answers, is_maximization):
         print(f"x{i + 1} =", answers[i])
 
 
-obj, constraints, rhs, accuracy, is_maximization = input_values()
+# obj, constraints, rhs, accuracy, is_maximization = input_values()
 
 # Example predefined values
 
