@@ -146,7 +146,35 @@ def input_values():
 
 
 def output_values(z_value, answers, is_maximization):
-    # Final output
+    # **Updated Output Function**
+    # 1. Print the optimization problem
+    if is_maximization:
+        optimization_type = "Maximize"
+    else:
+        optimization_type = "Minimize"
+
+    # Construct the objective function string
+    objective_terms = []
+    for i, coeff in enumerate(obj):
+        term = f"{coeff}*x{i + 1}"
+        objective_terms.append(term)
+    objective_str = " + ".join(objective_terms)
+
+    print(f"{optimization_type} z = {objective_str}")
+
+    # Print the constraints
+    print("subject to the constraints:")
+    for i, constraint in enumerate(constraints):
+        constraint_terms = []
+        for j, coeff in enumerate(constraint):
+            term = f"{coeff}*x{j + 1}"
+            constraint_terms.append(term)
+        constraint_str = " + ".join(constraint_terms)
+        print(f"{constraint_str} <= {rhs[i]}")
+
+    print()  # Add an empty line for better readability
+
+    # 2. Print the solution
     if is_maximization:
         print("Maximum z =", z_value)
     else:
@@ -165,7 +193,7 @@ def output_values(z_value, answers, is_maximization):
 
 # obj, constraints, rhs, accuracy, is_maximization = [9, 10, 16], [[18, 15, 12], [6, 4, 8], [5, 3, 3]], [360, 192, 180], 10, True
 
-# obj, constraints, rhs, accuracy, is_maximization = [3, 9], [[1, 4], [1 2]], [8, 4], 5, False
+# obj, constraints, rhs, accuracy, is_maximization = [3, 9], [[1, 4], [1, 2]], [8, 4], 5, False
 
 # obj, constraints, rhs, accuracy, is_maximization = [2, 1], [[1, -1], [1]], [10, 40], 5, True
 
@@ -174,8 +202,6 @@ def output_values(z_value, answers, is_maximization):
 # obj, constraints, rhs, accuracy, is_maximization = [2, 3, 0, -1, 0, 0 ], [[2, -1, 0, -2, 1, 0], [3, 2, 1, -3, 0, 0],  [-1, 3, 0, 4, 0, 1]], [16, 18, 24], 6, True
 
 # obj, constraints, rhs, accuracy, is_maximization = [4, 3, 5, 0, 0 ], [ [1, 2, 3, 1, 0],[2, 1, 0, 0, 1]], [10, 8], 6, True
-
-
 
 z_value, answers = simplex(obj, constraints, rhs, accuracy, is_maximization)
 output_values(z_value, answers, is_maximization)
