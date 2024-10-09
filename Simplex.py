@@ -162,8 +162,16 @@ def output_values(z_value, answers, is_maximization):
 # obj, constraints, rhs, accuracy, is_maximization = input_values()
 
 # Example predefined values
+
 # obj, constraints, rhs, accuracy, is_maximization = [3, 9], [[1, 4], [1, 2]], [8, 4], 6, True
-obj, constraints, rhs, accuracy, is_maximization = [9, 10, 16], [[18, 15, 12], [6, 4, 8], [5, 3, 3]], [360, 192, 180], 10, True
+
+# obj, constraints, rhs, accuracy, is_maximization = [9, 10, 16], [[18, 15, 12], [6, 4, 8], [5, 3, 3]], [360, 192, 180], 10, True
+
+# obj, constraints, rhs, accuracy, is_maximization = [3, 9], [[1, 4], [1 2]], [8, 4], 5, False
+
+# obj, constraints, rhs, accuracy, is_maximization = [2, 1], [[1, -1], [1]], [10, 40], 5, True
+
+# obj, constraints, rhs, accuracy, is_maximization = 
 
 z_value, answers = simplex(obj, constraints, rhs, accuracy, is_maximization)
 output_values(z_value, answers, is_maximization)
