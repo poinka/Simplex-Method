@@ -93,8 +93,8 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
 
         z_value = round_value(table[0][-1], accuracy)  # Update the current value of z
 
-        print("Updated Simplex Tableau:")
-        print(table, key_row)
+        # print("Updated Simplex Tableau:")
+        # print(table, key_row)
 
     # After the loop, determine the values of the decision variables
     answers = [0] * n  # Initialize all decision variables to zero
@@ -157,7 +157,7 @@ def output_values(z_value, answers, is_maximization):
         print(f"x{i + 1} =", answers[i])
 
 
-obj, constraints, rhs, accuracy, is_maximization = input_values()
+# obj, constraints, rhs, accuracy, is_maximization = input_values()
 
 # Example predefined values
 
@@ -173,5 +173,6 @@ obj, constraints, rhs, accuracy, is_maximization = input_values()
 
 # obj, constraints, rhs, accuracy, is_maximization = [2, 3, 0, -1, 0, 0 ], [[2, -1, 0, -2, 1, 0], [3, 2, 1, -3, 0, 0],  [-1, 3, 0, 4, 0, 1]], [16, 18, 24], 6, True
 
+obj, constraints, rhs, accuracy, is_maximization = [4, 3, 5, 0, 0 ], [ [1, 2, 3, 1, 0],[2, 1, 0, 0, 1]], [10, 8], 6, True
 z_value, answers = simplex(obj, constraints, rhs, accuracy, is_maximization)
 output_values(z_value, answers, is_maximization)
