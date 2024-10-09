@@ -121,7 +121,7 @@ def input_values():
         print("Enter the coefficients of constraint function separated by space (each constraint on each line):")
         for i in range(m):
             constraint = list(map(float, input().split()))
-            if len(constraint) != n:  # Check that each constraint has the correct number of coefficients
+            if len(constraint) > n:  # Check that each constraint has the correct number of coefficients
                 raise ValueError("Incorrect number of coefficients in constraints.")
             if not is_linear(constraint):
                 raise ValueError("Non-linear coefficients in constraints.")
