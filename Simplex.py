@@ -15,7 +15,7 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
         obj = [-x for x in obj]
 
     # Building the simplex tableau
-    table = [[0 for i in range(n + 1 + m)] for j in range(m+1)]  # Create table
+    table = [[0 for _ in range(n + 1 + m)] for _ in range(m + 1)]  # Create table
 
     for i in range(n):
         table[0][i] = -obj[i]  # Fill in z-row
@@ -34,17 +34,22 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
             if j - n == i - 1:
                 table[i][j] = 1
 
+    # Initialize basis variables
+    basis = [n + i for i in range(m)]  # [n, n+1, ..., n+m-1]
+
     # print("Initial Simplex Tableau:")
     # print(table)
 
-    answers = [0] * n  # List to store decision variable values
+    # Initialize answers and z_value
+    # Removed initial answers assignment as it will be handled after optimization
     z_value = 0  # This will store the value of the objective function
-    while any(round_value(x, accuracy) < 0 for x in table[0]):  # Check if there is any negative element
+
+    while any(round_value(x, accuracy) < 0 for x in table[0][:-1]):  # Exclude RHS in z-row
         key_col = -1
         min_val = float('inf')
 
-        # Find the column to pivot on
-        for i in range(n + m + 1):
+        # Find the column to pivot on (most negative coefficient in z-row)
+        for i in range(n + m):
             if round_value(table[0][i], accuracy) < round_value(min_val, accuracy):
                 min_val = table[0][i]
                 key_col = i
@@ -56,7 +61,7 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
         key_row = -1
         min_ratio = float('inf')
 
-        # Find the row to pivot on
+        # Find the row to pivot on using the minimum ratio test
         for i in range(1, m + 1):
             if round_value(table[i][key_col], accuracy) > 0:
                 ratio = table[i][-1] / table[i][key_col]
@@ -79,17 +84,24 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
                 for j in range(n + m + 1):
                     table[i][j] = round_value(table[i][j] - divisor * table[key_row][j], accuracy)
 
+        # Update basis
+        basis[key_row - 1] = key_col  # Update the basis with the new basic variable
+
         # Check for degeneracy
         if round_value(table[key_row][-1], accuracy) == 0:
             print(f"Degeneracy detected in row {key_row}. A basic variable is zero.")
 
         z_value = round_value(table[0][-1], accuracy)  # Update the current value of z
-        if key_col < n:
-            answers[key_col] = round_value(table[key_row][-1], accuracy)  # Update the value of the corresponding decision variable
 
         print("Updated Simplex Tableau:")
         print(table, key_row)
-        
+
+    # After the loop, determine the values of the decision variables
+    answers = [0] * n  # Initialize all decision variables to zero
+    for i in range(m):
+        if basis[i] < n:  # Only assign values to decision variables, not slack variables
+            answers[basis[i]] = round_value(table[i + 1][-1], accuracy)  # Assign the RHS value
+
     return z_value, answers
 
 
@@ -105,7 +117,7 @@ def input_values():
         print("Enter number of constraints:")
         m = int(input())
         constraints = []
-        
+
         print("Enter the coefficients of constraint function separated by space (each constraint on each line):")
         for i in range(m):
             constraint = list(map(float, input().split()))
@@ -129,7 +141,7 @@ def input_values():
     except ValueError:
         print("The method is not applicable!")
         exit()
-    
+
     return obj, constraints, rhs, accuracy, is_maximization
 
 
@@ -145,8 +157,13 @@ def output_values(z_value, answers, is_maximization):
         print(f"x{i + 1} =", answers[i])
 
 
+# Example usage with predefined values
+# You can uncomment the following lines to enable user input
 # obj, constraints, rhs, accuracy, is_maximization = input_values()
-# or
-obj, constraints, rhs, accuracy, is_maximization = [3, 9], [[1, 4], [1, 2]], [8, 4], 6, True
+
+# Example predefined values
+# obj, constraints, rhs, accuracy, is_maximization = [3, 9], [[1, 4], [1, 2]], [8, 4], 6, True
+obj, constraints, rhs, accuracy, is_maximization = [9, 10, 16], [[18, 15, 12], [6, 4, 8], [5, 3, 3]], [360, 192, 180], 10, True
+
 z_value, answers = simplex(obj, constraints, rhs, accuracy, is_maximization)
 output_values(z_value, answers, is_maximization)
