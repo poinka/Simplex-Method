@@ -7,10 +7,13 @@ def round_value(val, accuracy):
     return round(val, accuracy)
 
 
-def simplex(obj, constraints, rhs, accuracy):
+def simplex(obj, constraints, rhs, accuracy, is_maximization):
     n = len(obj)
     m = len(constraints)
-    
+
+    if not is_maximization:
+        obj = [-x for x in obj]
+
     # Building the simplex tableau
     table = [[0 for i in range(n + 1 + m)] for j in range(m+1)]  # Create table
 
@@ -57,7 +60,7 @@ def simplex(obj, constraints, rhs, accuracy):
         for i in range(1, m + 1):
             if round_value(table[i][key_col], accuracy) > 0:
                 ratio = table[i][-1] / table[i][key_col]
-                if round_value(ratio, accuracy) > 0 and round_value(ratio, accuracy) < round_value(min_ratio, accuracy):
+                if 0 < round_value(ratio, accuracy) < round_value(min_ratio, accuracy):
                     min_ratio = ratio
                     key_row = i
 
@@ -113,26 +116,33 @@ def input_values():
         if len(rhs) != m:
             raise ValueError("Number of RHS values does not match number of constraints.")
 
-        print("Enter the accuracy:")
+        print("Enter the accuracy (number of decimal places for rounding):")
         accuracy = int(input())
+
+        print("Are you trying to maximize the function? (yes/no):")
+        is_maximization = input().lower() == 'yes'
 
     except ValueError:
         print("The method is not applicable!")
         exit()
     
-    return obj, constraints, rhs, accuracy
+    return obj, constraints, rhs, accuracy, is_maximization
 
 
-def output_values(z_value, answers):
+def output_values(z_value, answers, is_maximization):
     # Final output
-    print("z =", z_value)
+    if is_maximization:
+        print("Maximum z =", z_value)
+    else:
+        print("Minimum z =", -z_value)
+
     # Output the values of decision variables
     for i in range(len(answers)):
         print(f"x{i + 1} =", answers[i])
 
 
-# obj, constraints, rhs, accuracy = input_values()
+# obj, constraints, rhs, accuracy, is_maximization = input_values()
 # or
-obj, constraints, rhs, accuracy = [5, 4], [[6, 4], [1, 2], [-1, 1], [0, 1]], [24, 6, 1, 2], 0
-z_value, answers = simplex(obj, constraints, rhs, accuracy)
-output_values(z_value, answers)
+obj, constraints, rhs, accuracy, is_maximization = [-2, -3], [[1, 1], [2, 1]], [1, 2], 5, False
+z_value, answers = simplex(obj, constraints, rhs, accuracy, is_maximization)
+output_values(z_value, answers, is_maximization)
