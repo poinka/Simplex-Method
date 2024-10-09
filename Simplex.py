@@ -60,7 +60,7 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
         for i in range(1, m + 1):
             if round_value(table[i][key_col], accuracy) > 0:
                 ratio = table[i][-1] / table[i][key_col]
-                if 0 < round_value(ratio, accuracy) < round_value(min_ratio, accuracy):
+                if 0 <= round_value(ratio, accuracy) < round_value(min_ratio, accuracy):
                     min_ratio = ratio
                     key_row = i
 
@@ -79,12 +79,16 @@ def simplex(obj, constraints, rhs, accuracy, is_maximization):
                 for j in range(n + m + 1):
                     table[i][j] = round_value(table[i][j] - divisor * table[key_row][j], accuracy)
 
+        # Check for degeneracy
+        if round_value(table[key_row][-1], accuracy) == 0:
+            print(f"Degeneracy detected in row {key_row}. A basic variable is zero.")
+
         z_value = round_value(table[0][-1], accuracy)  # Update the current value of z
         if key_col < n:
             answers[key_col] = round_value(table[key_row][-1], accuracy)  # Update the value of the corresponding decision variable
 
-        # print("Updated Simplex Tableau:")
-        # print(table)
+        print("Updated Simplex Tableau:")
+        print(table, key_row)
         
     return z_value, answers
 
@@ -143,6 +147,6 @@ def output_values(z_value, answers, is_maximization):
 
 # obj, constraints, rhs, accuracy, is_maximization = input_values()
 # or
-obj, constraints, rhs, accuracy, is_maximization = [-2, -3], [[1, 1], [2, 1]], [1, 2], 5, False
+obj, constraints, rhs, accuracy, is_maximization = [3, 9], [[1, 4], [1, 2]], [8, 4], 6, True
 z_value, answers = simplex(obj, constraints, rhs, accuracy, is_maximization)
 output_values(z_value, answers, is_maximization)
