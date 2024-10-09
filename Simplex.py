@@ -157,9 +157,7 @@ def output_values(z_value, answers, is_maximization):
         print(f"x{i + 1} =", answers[i])
 
 
-# Example usage with predefined values
-# You can uncomment the following lines to enable user input
-# obj, constraints, rhs, accuracy, is_maximization = input_values()
+obj, constraints, rhs, accuracy, is_maximization = input_values()
 
 # Example predefined values
 
