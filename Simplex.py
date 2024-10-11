@@ -1,5 +1,5 @@
 def is_linear(coefficients):
-    """Check if all coefficients are numbers (linear)."""
+    # Check if all coefficients are numbers (linear).
     return all(isinstance(c, (int, float)) for c in coefficients)
 
 
@@ -185,7 +185,7 @@ def output_values(z_value, answers, is_maximization):
         print(f"x{i + 1} =", answers[i])
 
 
-# obj, constraints, rhs, accuracy, is_maximization = input_values()
+obj, constraints, rhs, accuracy, is_maximization = input_values()
 
 # Example predefined values
 
